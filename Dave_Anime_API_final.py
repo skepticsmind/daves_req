@@ -7,9 +7,20 @@ def getShows(username):
 	planList = []
 	watchedCode = "2"
 	planCode = "6"
+	validData = False
 	#GET DATA
-	call = "https://myanimelist.net/malappinfo.php?u=" + username + "&status=all&type=anime"
-	response = requests.get(call)
+	while(validData == False):
+		call = "https://myanimelist.net/malappinfo.php?u=" + username + "&status=all&type=anime"
+		response = requests.get(call)
+		if response.status_code != 200:
+			print("Could not get valid data.")
+		elif response.status_code == 200:
+			soup = BeautifulSoup(response.text, "xml")
+			if soup.find("user_id") == None:
+				print("Invalid Username")
+				username = input("Enter a valid username ")
+			else:
+				validData = True
 	#PARSE DATA	
 	soup = BeautifulSoup(response.text, "xml")
 	shows = soup.find_all('series_title')
