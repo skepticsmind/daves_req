@@ -22,7 +22,6 @@ def getShows(username):
 			else:
 				validData = True
 	#PARSE DATA	
-	soup = BeautifulSoup(response.text, "xml")
 	shows = soup.find_all('series_title')
 	watchStatus = soup.find_all('my_status')
 	#FORMAT DATA
@@ -81,8 +80,8 @@ def getWatchPlan():
 def showWatch():
 	print("\n")
 #PRINT THE NO NO LIST
-	for x in range(0,len(noNoList)):
-		print(noNoList[x])
+	for x in range(0,len(masterWatchList)):
+		print(masterWatchList[x])
 
 def countFinal():
 	print("\n")
@@ -118,7 +117,7 @@ def exit():
 #######MAIN PROGRAM##############
 #DECLARE LISTS
 dictList = []
-noNoList = []
+masterWatchList = []
 combinedList = []
 finalList = []
 #PROMPT FOR USER INPUT
@@ -128,16 +127,16 @@ for x in range (0, numUser):
 	name = input("Enter a User Name ")
 	dictList.append(getShows(name))
 	for y in range(0,len(dictList[x]['watched'])):
-		if dictList[x]['watched'][y] in noNoList:
+		if dictList[x]['watched'][y] in masterWatchList:
 			pass
 		else:
-			noNoList.append(dictList[x]['watched'][y])	
+			masterWatchList.append(dictList[x]['watched'][y])	
 #SORT THE SHOWS WATCHED LIST
-noNoList.sort() 
+masterWatchList.sort() 
 #RUN THROUGH WATCH LISTS TO SEE WHAT PLAN TO WATCH ARE NOT IN WATCHED ALREADY
 for x in range (0, numUser):
 	for y in range(0,len(dictList[x]['plan'])):
-		if dictList[x]['plan'][y] in noNoList:
+		if dictList[x]['plan'][y] in masterWatchList:
 			pass
 		else:
 			dictList[x]['safePlan'].append(dictList[x]['plan'][y])
@@ -163,7 +162,7 @@ Get a persons plan to watch list.\n3) Get a persons watched and plan to watch li
 6) Show ALL users watched and plan to watch lists.\n7) \
 End\n"))
 #MAKE A SWITCH STATEMENT OUT OF A DICT CUZ PYTHON REASONS
-	fakeSwitch = switcher = {
+	fakeSwitch = {
 		1: getWatch,
 		2: getPlan,
 		3: getWatchPlan,
